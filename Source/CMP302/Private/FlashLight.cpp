@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CMP302/Private/FlashLight.h"
+#include "CMP302/Public/FlashLight.h"
 
 #include "Enemy.h"
-#include "CMP302/Private/CMP302Character.h"
+#include "CMP302/Public/CMP302Character.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/SpotLightComponent.h"

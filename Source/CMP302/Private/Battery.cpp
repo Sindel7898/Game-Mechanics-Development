@@ -1,9 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CMP302/Private/Battery.h"
-
-#include "CMP302/Private/CMP302Character.h"
+#include "CMP302/Public/Battery.h"
+#include "CMP302/Public/CMP302Character.h"
 #include "Components/SphereComponent.h"
 
 // Sets default values

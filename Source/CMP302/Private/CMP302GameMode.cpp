@@ -1,9 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "CMP302/Private/CMP302GameMode.h"
+#include "CMP302/Public/CMP302GameMode.h"
 
-#include "CustumPlayerController.h"
-#include "CMP302/Private/CMP302Character.h"
+//#include "CustumPlayerController.h"
+#include "CMP302/Public/CMP302Character.h"
 #include "UObject/ConstructorHelpers.h"
 
 ACMP302GameMode::ACMP302GameMode()

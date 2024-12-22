@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "CMP302/Private/CMP302Character.h"
+#include "CMP302/Public/CMP302Character.h"
 
 #include "Bird.h"
 #include "BombComponent.h"
@@ -14,7 +14,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Gun.h"
-#include "CMP302/Private/FlashLight.h"
+#include "CMP302/Public/FlashLight.h"
 #include "InputActionValue.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/GameplayStaticsTypes.h"
@@ -479,7 +479,7 @@ void ACMP302Character::UpdateTrajectory()
 	PredictionParams.ProjectileRadius = Radius;
 	PredictionParams.MaxSimTime = MaxSimTime;
 	PredictionParams.bTraceComplex = true;
-	PredictionParams.bTraceWithCollision = true;  // Enable collision checks
+	PredictionParams.bTraceWithCollision = true;
 	PredictionParams.SimFrequency = 5.0f;
 	PredictionParams.ActorsToIgnore = ActorsToIgnore;
 		

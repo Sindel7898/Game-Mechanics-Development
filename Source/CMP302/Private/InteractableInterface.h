@@ -21,5 +21,6 @@ class IInteractableInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 
+	//Interaction Interface
 	virtual void InteractWithMe(ACMP302Character* Player) = 0;
 };

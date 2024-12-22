@@ -6,8 +6,10 @@
 #include "CMP302Character.h"
 #include "Enemy.h"
 #include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
 #include "Engine/DamageEvents.h"
+#include "Components/BoxComponent.h"
 
 // Sets default values
 AGun::AGun()
@@ -55,7 +57,7 @@ void AGun::AttachToPlayerCamera()
 	{
 
 		this->AttachToComponent(PlayerCharacter->GetFollowCamera(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-		SetActorRelativeLocation(FVector(57.0f, 30.0f, -51.0f)); // Adjust as necessar
+		SetActorRelativeLocation(FVector(57.0f, 30.0f, -51.0f)); 
 		GunMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		GunMesh->SetSimulatePhysics(false);
 	}
@@ -79,14 +81,21 @@ void AGun::PerformLineTrace()
 		// If something was hit
 		if (AActor* HitActor = HitResult.GetActor())
 		{
-			AEnemy* EnemyCharacter = Cast<AEnemy>(HitActor);
-			
-			 if (EnemyCharacter)
+			if (AEnemy* EnemyCharacter = Cast<AEnemy>(HitActor))
 			{
-			 	EnemyCharacter->TakeDamage(40,FDamageEvent(),nullptr,this);
-			 	GEngine->AddOnScreenDebugMessage(3,2,FColor::Green,FString::Printf(TEXT("enemy taken damage on Body")));
+			 	UPrimitiveComponent* HitComponent = HitResult.GetComponent();
+			 	
+			    if (HitComponent == EnemyCharacter->GetHeadCollider())
+			    {
+			    	EnemyCharacter->TakeDamage(70,FDamageEvent(),nullptr,this);
+			    	GEngine->AddOnScreenDebugMessage(3,2,FColor::Green,FString::Printf(TEXT("enemy taken damage on Head")));
+			    }
+			 	else if (HitComponent == EnemyCharacter->GetBodyCollider())
+			 	{
+			 		EnemyCharacter->TakeDamage(40,FDamageEvent(),nullptr,this);
+			 		GEngine->AddOnScreenDebugMessage(3,2,FColor::Green,FString::Printf(TEXT("enemy taken damage on body")));
+			 	}
 			}
-			
 		}
 
 		// Draw a debug line in the world for visual feedback

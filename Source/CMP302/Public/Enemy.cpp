@@ -7,6 +7,8 @@
 
 
 #include "CMP302Character.h"
+#include "Components/BoxComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Engine/DamageEvents.h"
@@ -18,12 +20,18 @@ AEnemy::AEnemy()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Initialize DamageCollider as a sphere that detects collisions for damage
-	DamageCollider = CreateDefaultSubobject<USphereComponent>(TEXT("DAMAGE COLLIDER"));
-	DamageCollider->SetupAttachment(GetRootComponent());
+	ColliderForPlayer = CreateDefaultSubobject<USphereComponent>(TEXT(" DAMAGE COLLIDER For Player"));
+	ColliderForPlayer->SetupAttachment(GetRootComponent());
+	
+	HeadDamageCollider = CreateDefaultSubobject<USphereComponent>(TEXT(" HEAD DAMAGE COLLIDER"));
+	HeadDamageCollider->SetupAttachment(GetRootComponent());
 
+	BodyDamageCollider = CreateDefaultSubobject<UBoxComponent>(TEXT(" Body DAMAGE COLLIDER"));
+	BodyDamageCollider->SetupAttachment(GetRootComponent());
+	
 	// Bind overlap events to the appropriate functions
-	DamageCollider->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnOverlapBegin);
-	DamageCollider->OnComponentEndOverlap.AddDynamic(this, &AEnemy::OnOverlapEnd);
+	ColliderForPlayer->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnOverlapBegin);
+	ColliderForPlayer->OnComponentEndOverlap.AddDynamic(this, &AEnemy::OnOverlapEnd);
 
 	OnTakeAnyDamage.AddDynamic(this, &AEnemy::OnAnyDamageTaken);
 	
@@ -96,15 +104,8 @@ void AEnemy::CheckIfEnemyIsDead()
 
 void AEnemy::DestroyEnemy()
 {
-
 	TriggerExplosionEffect();
 	Destroy();
-}
-
-// Function to get the behavior tree associated with the enemy
-UBehaviorTree* AEnemy::GetBehaviorTree() const
-{
-	return Tree;
 }
 
 // Function to get the damage taken by the enemy

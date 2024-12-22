@@ -7,7 +7,6 @@
 #include "Enemy.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "NavigationSystem.h"
 #include "SimpleAIController.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -18,30 +17,23 @@ ABird::ABird()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	
+	// Set up flying Details
 	GetCharacterMovement()->DefaultLandMovementMode = MOVE_Flying;
 	GetCharacterMovement()->SetMovementMode(MOVE_Flying);
-
-
-	GetCharacterMovement()->MaxFlySpeed = 600.f; // Adjust speed to feel responsive
-	GetCharacterMovement()->BrakingDecelerationFlying = 2000.f; // Smooth stopping
-	GetCharacterMovement()->AirControl = 1.f; // Allow fine-grained control in the air
+	GetCharacterMovement()->MaxFlySpeed = 600.f; 
+	GetCharacterMovement()->BrakingDecelerationFlying = 2000.f;
+	GetCharacterMovement()->AirControl = 1.f; 
 	GetCharacterMovement()->MaxAcceleration =  2048.f;
-	
+	////////////////////////////////////////////////////////////////////////
 }
 
 // Called when the game starts or when spawned
 void ABird::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	AIController = Cast<ASimpleAIController>(this->GetController<ASimpleAIController>());
-	
-	if (AIController)
-	{
-		AIController->Possess(this);
-	}
 
+	//Get Controller
+	AIController = Cast<ASimpleAIController>(this->GetController<ASimpleAIController>());
 }
 
 // Called every frame
@@ -50,7 +42,10 @@ void ABird::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	CheckifBirdLookingAtEnemy();
 
-	MoveToRandomLocation();
+	if (Controller != nullptr && Cast<APlayerController>(Controller))
+	{
+		AddMovementInput(GetActorForwardVector());
+	}
 }
 
 void ABird::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -68,35 +63,14 @@ void ABird::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
-		EnhancedInputComponent->BindAction(BirdMoveAction, ETriggerEvent::Triggered, this, &ABird::Move);
 		EnhancedInputComponent->BindAction(BirdLookAction, ETriggerEvent::Triggered, this, &ABird::Look);
 		EnhancedInputComponent->BindAction(AccendButton  , ETriggerEvent::Triggered, this, &ABird::Ascend);
 		EnhancedInputComponent->BindAction(DescendButton , ETriggerEvent::Triggered, this, &ABird::Descend);
-
 		EnhancedInputComponent->BindAction(SwitchButton  , ETriggerEvent::Completed, this, &ABird::SwitchToPlayer);
 	}
 
 }
 
-void ABird::Move(const FInputActionValue& Value)
-{
-	// input is a Vector2D
-	FVector2D MovementVector = Value.Get<FVector2D>();
-
-	if (Controller != nullptr)
-	{
-		// find out which way is forward
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		// get forward vector
-		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-
-		// add movement 
-		AddMovementInput(ForwardDirection, MovementVector.Y);
-	}
-	
-}
 
 void ABird::Ascend(const FInputActionValue& Value)
 {
@@ -199,39 +173,4 @@ void ABird::CheckifBirdLookingAtEnemy()
 		}
 	}
 	
-}
-
-void ABird::MoveToRandomLocation()
-{
-	// Check if the bird is possessed. Skip random movement if controlled by the player.
-	if (GetController() == nullptr)
-	{
-		
-	}
-}
-
-FVector ABird::GetRandomLocationWithinRadius(float Radius)
-{
-	FVector Origin = GetActorLocation();
-    FVector2D RandomPoint2D = FMath::RandPointInCircle(Radius);
-	FVector RandomPoint = FVector(RandomPoint2D.X, RandomPoint2D.Y, Origin.Z);
-	return RandomPoint;
-}
-
-void ABird::PossessedBy(AController* NewController)
-{
-	Super::PossessedBy(NewController);
-
-	if (AIController == NewController)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("AI Pawn has been possessed!"));
-	}
-
-	APlayerController* PlayerController = Cast<APlayerController>(this->GetController<APlayerController>());
-
-	if (PlayerController == NewController)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("possessed by Player"));
-	}
-
 }

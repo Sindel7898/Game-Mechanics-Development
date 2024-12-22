@@ -34,8 +34,6 @@ AStreetLamp::AStreetLamp()
 void AStreetLamp::BeginPlay()
 {
 	Super::BeginPlay();
-
-	
 }
 
 // Called every frame
@@ -53,6 +51,8 @@ void AStreetLamp::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 	 PlayerRef =  Cast<ACMP302Character>(OtherActor);
 	 if (PlayerRef)
 	 {
+	 	GEngine->AddOnScreenDebugMessage(9, 3.f, FColor::Green, FString::Printf(TEXT(" OVERLAPPP on street lamp")));
+
 	 	GetWorldTimerManager().SetTimer(HealthTimer,this,&AStreetLamp::ReplenishPlayerHealth,0.5f,true);
 	 	GetWorldTimerManager().SetTimer(EquipmentTimer,this,&AStreetLamp::ReplenishPlayerFlashAndGun,0.5f,true);
 		 

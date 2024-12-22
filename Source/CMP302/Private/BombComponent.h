@@ -22,14 +22,16 @@ private:
 	virtual void Tick(float DeltaTime) override;
 	virtual void OnConstruction(const FTransform& Transform) override;
 
+	///////////////////////////////
 	void ApplyDamageToEnemies();
 	void TriggerExplosionEffect();
 	void RestPlayerPostProces();
 	void ExplodeFunction();
 	void ApplyDamageToPlayer();
-
+    ///////////////////////////////
+    
 protected:
-		
+	
 	UPROPERTY(EditAnywhere)
 	class UStaticMeshComponent* MeshComponent;
 	

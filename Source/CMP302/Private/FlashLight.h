@@ -27,7 +27,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	void InteractWithMe(ACMP302Character* Player) override;
+	virtual void InteractWithMe(ACMP302Character* Player) override;
 	void PerformLineTraces();
 	void IncreaseLightIntensity();
 	void DecreaseLightIntensity();

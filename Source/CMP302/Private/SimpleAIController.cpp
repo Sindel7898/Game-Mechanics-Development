@@ -14,13 +14,7 @@ ASimpleAIController::ASimpleAIController(FObjectInitializer const& ObjectInitial
 void ASimpleAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-
-	if (ABird* BirdRef = Cast<ABird>(InPawn))
-	{
-		UBlackboardComponent* BlackBoard;
-		UseBlackboard(BirdRef->GetBehaviorTree()->GetBlackboardAsset(),BlackBoard);
-		RunBehaviorTree(BirdRef->GetBehaviorTree());
-	}
+	
 }
 
 

@@ -17,15 +17,14 @@ class CMP302_API ABattery : public AActor,public IInteractableInterface
 public:	
 	// Sets default values for this actor's properties
 	ABattery();
+	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaTime) override;
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-	void InteractWithMe(ACMP302Character* Player) override;
+	virtual void InteractWithMe(ACMP302Character* Player) override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+private:	
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* StaticMesh;

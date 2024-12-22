@@ -41,12 +41,17 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	float HealthPercentage();
 	void DestroyEnemy();
-	void IncreaseSeenTime();
 	void TriggerExplosionEffect();
 	void NegatePlayerHealth();
-	
+
 	UPROPERTY(EditAnywhere)
-	class USphereComponent* DamageCollider;
+	class USphereComponent* HeadDamageCollider;
+
+	UPROPERTY(EditAnywhere)
+	class UBoxComponent* BodyDamageCollider;
+
+	UPROPERTY(EditAnywhere)
+	class USphereComponent* ColliderForPlayer;
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
 	class UParticleSystem* ExplosionEffect;
@@ -84,11 +89,12 @@ protected:
 
 public:
 	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
-	UBehaviorTree* GetBehaviorTree() const;
 
 	UFUNCTION(BlueprintCallable)
 	float GetDamageToSelf();
 
 	bool PlayerSeen = false;
 
+	USphereComponent* GetHeadCollider(){ return  HeadDamageCollider;}
+	UBoxComponent* GetBodyCollider(){ return  BodyDamageCollider;}
 };

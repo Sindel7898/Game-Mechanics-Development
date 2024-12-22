@@ -34,7 +34,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void AttachToPlayerCamera();
 	void PerformLineTrace ();
-	void InteractWithMe(ACMP302Character* Player) override;
+	virtual void InteractWithMe(ACMP302Character* Player) override;
 
 	UPROPERTY()
 	ACMP302Character* PlayerCharacter;

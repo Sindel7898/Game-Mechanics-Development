@@ -21,13 +21,28 @@ public:
 	// Sets default values for this actor's properties
 	ABird();
 
+private:
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	void Ascend(const FInputActionValue& Value);
+	void Descend(const FInputActionValue& Value);
+	void Look(const FInputActionValue& Value);
+	void SwitchToPlayer();
+	void CheckifBirdLookingAtEnemy();
+
+	UPROPERTY()
+	ACMP302Character* PlayerRef;
+	UPROPERTY(EditAnywhere)
+	UMaterialInstance* EnemyDefultMat;
+	UPROPERTY(EditAnywhere)
+	UMaterialInstance* EnemyDefultMat2;
+	UPROPERTY(EditAnywhere)
+	UMaterialInstance* EmmisiveMaterial;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* BirdDefaultMappingContext;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* BirdMoveAction;
-
 	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* BirdLookAction;
@@ -51,29 +66,4 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-
-
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	void Move(const FInputActionValue& Value);
-	void Ascend(const FInputActionValue& Value);
-	void Descend(const FInputActionValue& Value);
-	void Look(const FInputActionValue& Value);
-	void SwitchToPlayer();
-	void CheckifBirdLookingAtEnemy();
-	void MoveToRandomLocation();
-	FVector GetRandomLocationWithinRadius(float Radius);
-	virtual  void PossessedBy(AController* NewController)override;
-	UBehaviorTree* GetBehaviorTree() const {return BehaviorTree;}
-
-	UPROPERTY()
-	ACMP302Character* PlayerRef;
-	UPROPERTY(EditAnywhere)
-	UMaterialInstance* EnemyDefultMat;
-	UPROPERTY(EditAnywhere)
-	UMaterialInstance* EnemyDefultMat2;
-	UPROPERTY(EditAnywhere)
-	UMaterialInstance* EmmisiveMaterial;
 };

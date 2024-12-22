@@ -33,7 +33,7 @@ ABomb::ABomb()
 	RadialForcecomponent = CreateDefaultSubobject<URadialForceComponent>(TEXT("Radial Force"));
 	RadialForcecomponent->SetupAttachment(MeshComponent);
 	RadialForcecomponent->Radius = DamageRadius;
-	RadialForcecomponent->ImpulseStrength = 500.0f;
+	RadialForcecomponent->ImpulseStrength = 500.0f; 
 	RadialForcecomponent->bImpulseVelChange = true;
 	RadialForcecomponent->bAutoActivate = false; 
 	RadialForcecomponent->bIgnoreOwningActor = true;

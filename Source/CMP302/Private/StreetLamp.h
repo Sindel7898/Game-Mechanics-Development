@@ -50,6 +50,7 @@ public:
 	void ReplenishPlayerHealth();
 	void ReplenishPlayerFlashAndGun();
 
+	UPROPERTY()
 	 ACMP302Character*  PlayerRef;
 
 	FTimerHandle HealthTimer;

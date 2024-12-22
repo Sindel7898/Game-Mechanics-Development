@@ -71,12 +71,12 @@ void ABird::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-
+//movde down 
 void ABird::Ascend(const FInputActionValue& Value)
 {
 	AddMovementInput(FVector::UpVector, Value.Get<float>());
 }
-
+//move up
 void ABird::Descend(const FInputActionValue& Value)
 {
 	AddMovementInput(-FVector::UpVector, Value.Get<float>());
@@ -101,6 +101,7 @@ void ABird::SwitchToPlayer()
 	TSubclassOf<ACMP302Character> PlayerClass = ACMP302Character::StaticClass();
 	TArray<AActor*> FoundPlayerActor;
 	
+	//find other character
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(),PlayerClass,FoundPlayerActor);
 
 	for (AActor* actors : FoundPlayerActor)
@@ -124,6 +125,7 @@ void ABird::SwitchToPlayer()
 						
 						if (AIController)
 						{
+							//possess
 							AIController->Possess(this);
 						}
 					}
@@ -151,11 +153,12 @@ void ABird::CheckifBirdLookingAtEnemy()
 	     AEnemy* EnemyRef = Cast<AEnemy>(actors);
 		
 		if (EnemyRef)
-		{
+		{    //calculate where the actor is looking
 			FVector BirdForward = GetActorForwardVector().GetSafeNormal();
 			FVector DirectionToEnemy = (EnemyRef->GetActorLocation() - GetActorLocation()).GetSafeNormal();
 			float DotProduct = FVector::DotProduct(BirdForward, DirectionToEnemy);
 
+			//spawn out materials
 			if (DotProduct >0.8)
 			{
 				EnemyRef->GetMesh()->SetMaterial(0,EmmisiveMaterial);

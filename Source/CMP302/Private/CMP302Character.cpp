@@ -305,14 +305,19 @@ void ACMP302Character::SwitchToBird()
 	}
 
 }
+
 void ACMP302Character::GeneralInteractions()
 {
+
+
+	//interactions to see what is overlaping the actor
 	TArray<AActor*> Overlappingactors;
+
 	GetOverlappingActors(Overlappingactors);
 
 	for (AActor* Actor : Overlappingactors)
 	{
-
+		// Update currently overlapped actor references if needed
 		if(FoundFlashLightRef == false)
 		{
 			CurrentlyOverlappedActor = Actor;
@@ -325,10 +330,12 @@ void ACMP302Character::GeneralInteractions()
 		
 		if (Actor)
 		{
+			// Attempt to cast the overlapping actor to an interactable interface
 			InteractableObject = Cast<IInteractableInterface>(Actor);
 
 			if(InteractableObject)
 			{
+				// Trigger interaction logic for the interactable object
 				InteractableObject->InteractWithMe(this);
 			}
 		}
@@ -337,8 +344,10 @@ void ACMP302Character::GeneralInteractions()
 
 void ACMP302Character::FlashLightIntensityButton(const FInputActionValue& Value)
 {
+	// Check if the flashlight intensity button is pressed
 	bool IntensityButton = Value.Get<bool>();
 
+	// Cast the currently overlapped actor to a flashlight
 	FlashLight = Cast<AFlashLight>(CurrentlyOverlappedActor);
 
 			if(IntensityButton && FlashLight && CountDown == 5.00)
@@ -350,6 +359,7 @@ void ACMP302Character::FlashLightIntensityButton(const FInputActionValue& Value)
 					
 					if(BatteryCount >=0)
 					{
+						// Increase flashlight intensity and perform necessary line traces
 						FlashLight->IncreaseLightIntensity();
 						FlashLight->PerformLineTraces();
 					}
@@ -365,10 +375,13 @@ void ACMP302Character::FlashLightIntensityButton(const FInputActionValue& Value)
 
 void ACMP302Character::DecreaseTime(float DeltaTime)
 {
+	// Decrease the countdown timer
 	CountDown -= DeltaTime;
 
 	if (CountDown < 0)
 	{
+		// Reset timer when it runs out
+
 		ShouldTimerTick = false;
 		CountDown = 5.0f;
 	}
@@ -378,6 +391,7 @@ void ACMP302Character::Shoot(const FInputActionValue& Value)
 {
 	bool IntensityButton = Value.Get<bool>();
 	
+	// Cast the other currently overlapped actor to a gun
 	Gun = Cast<AGun>(OtherCurrentlyOverlappedActor);
 
 	if(IntensityButton && Gun)
@@ -402,8 +416,10 @@ void ACMP302Character::Shoot(const FInputActionValue& Value)
 	}
 }
 
-void ACMP302Character::Jump()
+void ACMP302Character::Jump()    // Set jump state variables
+
 {
+	// Set jump state variables
 	bPressedJump = true;
 	JumpKeyHoldTime = 0.0f;
 	ISPlayerJumping = true;
@@ -412,6 +428,7 @@ void ACMP302Character::Jump()
 
 void ACMP302Character::StopJumping()
 {
+	// Reset jump state variables
 	bPressedJump = false;
 	ResetJumpState();
 	ISPlayerJumping = false;
@@ -463,14 +480,17 @@ void ACMP302Character::PerformLineTrace()
 
 void ACMP302Character::UpdateTrajectory()
 {
+	// Initialize projectile prediction parameters
 	FPredictProjectilePathParams PredictionParams;
 	
+	// Set the start location of the trajectory to the character's location with a slight vertical offset
 	FVector StartLocation = GetActorLocation();
 	StartLocation.Z+= 15.0f;
 	FVector InitialVelocity = GetFollowCamera()->GetForwardVector() * 100 * 10.0;
 	
 	float Radius = 20.0f;
 	float MaxSimTime = 9.0f;
+	// Create a list of actors to ignore during the trajectory simulation and add this character to the list
     TArray<AActor* > ActorsToIgnore;
 	ActorsToIgnore.Add(this);
 	
@@ -484,8 +504,10 @@ void ACMP302Character::UpdateTrajectory()
 	PredictionParams.ActorsToIgnore = ActorsToIgnore;
 		
 	 FPredictProjectilePathResult PredictResult;
+	 // Perform the trajectory prediction using Unreal Engine's gameplay utilities
      UGameplayStatics::PredictProjectilePath(GetWorld(),PredictionParams,PredictResult);
 	
+	 // Iterate through the predicted path points to draw the trajectory as debug lines
 		for (int32 i = 0; i < PredictResult.PathData.Num() - 1; ++i)
 		{
 			FVector StartPoint = PredictResult.PathData[i].Location;
